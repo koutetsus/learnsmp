@@ -50,7 +50,7 @@
                 <!-- Page Heading -->
                 <header>
                     <div class="p-4 sm:p-6">
-                        {{ $header ?? 'Default Header Title' }}</h1>
+                        {{ $header ?? '' }}</h1>
                     </div>
                 </header>
 

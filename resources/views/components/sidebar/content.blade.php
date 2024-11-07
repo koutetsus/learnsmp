@@ -50,7 +50,27 @@
         :isActive="request()->routeIs('materis.index')"
     >
         <x-slot name="icon">
-            <x-heroicon-o-user class="flex-shrink-0 w-6 h-6" aria-hidden="true"/>
+            <x-heroicon-o-book-open class="flex-shrink-0 w-6 h-6" aria-hidden="true"/>
+        </x-slot>
+    </x-sidebar.link>
+
+    <x-sidebar.link
+        title="Quiz"
+        href="{{ route('quizzes.index') }}"
+        :isActive="request()->routeIs('quizzes.index')"
+    >
+        <x-slot name="icon">
+            <x-heroicon-o-book-open class="flex-shrink-0 w-6 h-6" aria-hidden="true"/>
+        </x-slot>
+    </x-sidebar.link>
+
+    <x-sidebar.link
+    title="Student Score"
+    href="{{ route('student-scores') }}"
+    :isActive="request()->routeIs('student-scores')"
+    >
+        <x-slot name="icon">
+            <x-heroicon-o-book-open  class="flex-shrink-0 w-6 h-6" aria-hidden="true"/>
         </x-slot>
     </x-sidebar.link>
 

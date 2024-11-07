@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +40,18 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('materis', MateriController::class);
     Route::get('materis/{materi}', [MateriController::class, 'show'])->name('materis.show');
+    Route::resource('quizzes', QuizController::class);
+    Route::post('/mata-pelajaran', [MataPelajaranController::class, 'store'])->name('mataPelajaran.store');
+
+    Route::get('/quizzes/{id}/take', [QuizController::class, 'take'])->name('quizzes.take');
+    Route::post('/quizzes/{id}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+    Route::get('/quizzes/{id}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::get('/student-scores', [QuizController::class, 'studentScores'])->name('student-scores');
+
+    Route::get('/student-scores/export', [QuizController::class, 'exportStudentScoresPdf'])->name('student-scores.export');
+
+    Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.materi.index');
+    Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.quiz.index');
 
 });
 

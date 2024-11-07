@@ -3,12 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
+use App\Models\Assignment;
 use Illuminate\Http\Request;
+use App\Models\MataPelajaran;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class MateriController extends Controller
+class MateriController extends Controller implements HasMiddleware
 {
-
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:materi-list|materi-create|materi-edit|materi-delete', only: ['index', 'show']),
+            new Middleware('permission:materi-create', only: ['create', 'store']),
+            new Middleware('permission:materi-edit', only: ['edit', 'update']),
+            new Middleware('permission:materi-delete', only: ['destroy']),
+        ];
+    }
     public function index()
     {
         $materis = Materi::where('teacher_id', Auth::id())->paginate(10);
@@ -17,41 +34,51 @@ class MateriController extends Controller
 
     public function create()
     {
-        return view('materis.create');
+        $mataPelajaran = MataPelajaran::all(); // Get all Mata Pelajaran for the dropdown
+        return view('materis.create', compact('mataPelajaran'));
     }
 
     public function store(Request $request)
     {
+        // Validate Materi data
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'required|in:document,article,ppt,video',
             'content' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,mp4,avi',
+            'type' => 'required|string',
             'url' => 'nullable|url',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+            'assignment' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+            'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id', // Validate mata_pelajaran_id
         ]);
 
-        $data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type,
+        // Store Materi data
+        $materi = Materi::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'content' => $request->input('content'),
+            'type' => $request->input('type'),
+            'url' => $request->input('url'),
             'teacher_id' => Auth::id(),
-        ];
+            'mata_pelajaran_id' => $request->input('mata_pelajaran_id'),
+        ]);
 
-        if ($request->type === 'article') {
-            $data['content'] = $request->content;
-        }
-
+        // Handle file upload for Materi
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('materis');
-            $data['url'] = $filePath;
-        } elseif ($request->type === 'document' || $request->type === 'ppt') {
-            $data['url'] = $request->url;
+            $filePath = $request->file('file')->store('materi_files');
+            $materi->file = $filePath;
+            $materi->save();
         }
 
-        Materi::create($data);
+        // Handle Assignment upload
+        if ($request->hasFile('assignment')) {
+            $assignment = new Assignment();
+            $assignment->materi_id = $materi->id; // Link the assignment to the created materi
+            $assignment->file = $request->file('assignment')->store('assignments');
+            $assignment->save();
+        }
 
-        return redirect()->route('materis.index')->with('success', 'Materi created successfully.');
+        return redirect()->route('materis.index')->with('success', 'Materi and Assignment saved successfully!');
     }
 
     public function edit(Materi $materi)

@@ -16,10 +16,18 @@ class Materi extends Model
         'type',
         'url',
         'teacher_id',
+        'mata_pelajaran_id',  // Add this line
     ];
 
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
+
+    public function mataPelajaran()
+{
+    return $this->belongsTo(MataPelajaran::class, 'mata_pelajaran_id');
+}
+
+
 }

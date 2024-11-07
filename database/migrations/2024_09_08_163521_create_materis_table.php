@@ -11,6 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('mata_pelajaran', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
         Schema::create('materis', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -19,6 +25,8 @@ return new class extends Migration
             $table->enum('type', ['document', 'video', 'link', 'ppt']); // Tambahkan tipe lain jika perlu
             $table->string('url')->nullable(); // Untuk URL atau path file
             $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade'); // Relasi dengan tabel users
+            $table->unsignedBigInteger('mata_pelajaran_id');
+            $table->foreign('mata_pelajaran_id')->references('id')->on('mata_pelajaran')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,5 +37,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('materis');
+        Schema::dropIfExists('mata_pelajaran');
     }
 };
