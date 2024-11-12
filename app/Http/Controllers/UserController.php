@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Spatie\Permission\Models\Role;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public static function middleware(): array
+    {
+     return [
+           new Middleware('permission:user-list|user-create|user-useredit|user-delete', only: ['index', 'show']),
+           new Middleware('permission:user-create', only: ['create', 'store']),
+           new Middleware('permission:user-edit', only: ['edit', 'update']),
+           new Middleware('permission:user-delete', only: ['destroy']),
+       ];
+    }
+
     public function index()
     {
         $users = User::with('roles')->paginate(10);

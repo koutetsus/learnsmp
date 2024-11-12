@@ -4,10 +4,22 @@ namespace App\Http\Controllers;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+
+    public static function middleware(): array
+    {
+     return [
+           new Middleware('permission:role-list|role-create|role-edit|role-delete', only: ['index', 'show']),
+           new Middleware('permission:role-create', only: ['create', 'store']),
+           new Middleware('permission:role-edit', only: ['edit', 'update']),
+           new Middleware('permission:role-delete', only: ['destroy']),
+       ];
+    }
+
     public function index()
     {
         $roles = Role::paginate(10);

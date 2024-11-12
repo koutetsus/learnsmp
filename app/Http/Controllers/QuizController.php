@@ -19,15 +19,15 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class QuizController extends Controller
 {
-    // public static function middleware(): array
-    // {
-    //     return [
-    //         new Middleware('permission:materi-list|materi-create|materi-edit|materi-delete', only: ['index', 'show']),
-    //         new Middleware('permission:materi-create', only: ['create', 'store']),
-    //         new Middleware('permission:materi-edit', only: ['edit', 'update']),
-    //         new Middleware('permission:materi-delete', only: ['destroy']),
-    //     ];
-    // }
+    public static function middleware(): array
+    {
+     return [
+           new Middleware('permission:quiz-list|quiz-create|quiz-edit|quiz-delete', only: ['index', 'show']),
+           new Middleware('permission:quiz-create', only: ['create', 'store']),
+           new Middleware('permission:quiz-edit', only: ['edit', 'update']),
+           new Middleware('permission:quiz-delete', only: ['destroy']),
+       ];
+    }
     public function create()
     {
         $subjects = MataPelajaran::all(); // Fetch subjects for the dropdown

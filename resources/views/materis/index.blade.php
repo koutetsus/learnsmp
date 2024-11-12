@@ -18,7 +18,8 @@
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr>
-                    <th class="border-b py-2 px-4 text-left">Title</th>
+                    <th class="border-b py-2 px-4 text-left">Mata Pelajaran</th>
+                    <th class="border-b py-2 px-4 text-left">Nama Materi</th>
                     <th class="border-b py-2 px-4 text-left">Type</th>
                     <th class="border-b py-2 px-4 text-left">Actions</th>
                 </tr>
@@ -26,6 +27,7 @@
             <tbody>
                 @foreach($materis as $materi)
                     <tr>
+                        <td class="border-b py-2 px-4">{{ $materi->mataPelajaran->name }}</td>
                         <td class="border-b py-2 px-4">{{ $materi->title }}</td>
                         <td class="border-b py-2 px-4">{{ ucfirst($materi->type) }}</td>
                         <td class="border-b py-2 px-4">

@@ -12,18 +12,48 @@ class PermissionSeeder extends Seeder
     {
         // Define permissions
         $permissions = [
-            'view materi',
-            'edit materi',
-            'delete materi',
-            'manage quizzes',
+            'materi-list',
+            'materi-create',
+            'materi-edit',
+            'materi-delete',
+            'quiz-list',
+            'quiz-create',
+            'quiz-edit',
+            'quiz-delete',
+            'role-list',
+            'role-create',
+            'role-edit',
+            'role-delete',
+            'user-list',
+            'user-create',
+            'user-edit',
+            'user-delete',
         ];
 
+        // Create permissions
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        // Define roles and assign permissions
-        $role = Role::create(['name' => 'siswa']);
-        $role->givePermissionTo($permissions);
+        // Define roles and assign specific permissions
+        // Admin Role - Full Access
+        $adminPermissions = $permissions; // Admin gets all permissions
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole->syncPermissions($adminPermissions);
+
+        // Guru Role - Limited Access
+        $guruPermissions = [
+            'materi-list', 'materi-create', 'materi-edit', 'materi-delete',
+            'quiz-list', 'quiz-create', 'quiz-edit', 'quiz-delete',
+        ];
+        $guruRole = Role::firstOrCreate(['name' => 'guru']);
+        $guruRole->syncPermissions($guruPermissions);
+
+        // Siswa Role - View Access Only
+        $siswaPermissions = [
+            'materi-list', 'quiz-list',
+        ];
+        $siswaRole = Role::firstOrCreate(['name' => 'siswa']);
+        $siswaRole->syncPermissions($siswaPermissions);
     }
 }
