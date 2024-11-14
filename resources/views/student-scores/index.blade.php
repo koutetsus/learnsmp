@@ -2,6 +2,7 @@
     <x-slot name="header">
         <h1 class="text-xl font-bold">Student Scores</h1>
     </x-slot>
+    @can( 'getStudentscore')
 
     <div class="space-y-6">
         <div class="mb-4">
@@ -10,6 +11,8 @@
             </a>
 
         </div>
+
+    @endcan
 
         <!-- Existing content for displaying scores -->
         @foreach($scores as $subjectName => $quizzes)

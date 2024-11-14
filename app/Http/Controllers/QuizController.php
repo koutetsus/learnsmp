@@ -22,7 +22,7 @@ class QuizController extends Controller
     public static function middleware(): array
     {
      return [
-           new Middleware('permission:quiz-list|quiz-create|quiz-edit|quiz-delete', only: ['index', 'show']),
+           new Middleware('permission:quiz-list', only: ['index', 'show']),
            new Middleware('permission:quiz-create', only: ['create', 'store']),
            new Middleware('permission:quiz-edit', only: ['edit', 'update']),
            new Middleware('permission:quiz-delete', only: ['destroy']),
@@ -73,6 +73,13 @@ class QuizController extends Controller
         $quizzes = Quiz::with('mataPelajaran')->get(); // Eager load mataPelajaran relationship
         Log::info($quizzes);
         return view('quizzes.index', compact('quizzes'));
+    }
+
+    public function destroy(Quiz $quiz)
+    {
+        $quiz->delete();
+
+        return redirect()->route('quizzes.index')->with('success', 'Quiz deleted successfully.');
     }
 
     public function show($id)

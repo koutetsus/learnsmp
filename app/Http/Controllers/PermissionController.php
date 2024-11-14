@@ -4,9 +4,21 @@ namespace App\Http\Controllers;
 
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
 
 class PermissionController extends Controller
 {
+
+    public static function middleware(): array
+    {
+     return [
+           new Middleware('permission:permission-list', only: ['index', 'show']),
+           new Middleware('permission:permission-create', only: ['create', 'store']),
+           new Middleware('permission:permission-edit', only: ['edit', 'update']),
+           new Middleware('permission:permission-delete', only: ['destroy']),
+       ];
+    }
+
     public function index()
     {
         // Fetch paginated list of permissions

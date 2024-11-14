@@ -13,6 +13,7 @@ class PermissionSeeder extends Seeder
         // Define permissions
         $permissions = [
             'materi-list',
+            'materi-show',
             'materi-create',
             'materi-edit',
             'materi-delete',
@@ -20,6 +21,7 @@ class PermissionSeeder extends Seeder
             'quiz-create',
             'quiz-edit',
             'quiz-delete',
+            'getStudentscore',
             'role-list',
             'role-create',
             'role-edit',
@@ -28,6 +30,17 @@ class PermissionSeeder extends Seeder
             'user-create',
             'user-edit',
             'user-delete',
+            'view-dashboard',
+            'view-user',
+            'view-role',
+            'view-permission',
+            'view-materi',
+            'view-quiz',
+            'view-student-scores',
+            'permission-list',
+            'permission-create',
+            'permission-edit',
+            'permission-delete',
         ];
 
         // Create permissions

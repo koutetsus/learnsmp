@@ -11,27 +11,56 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Spatie\Permission\Traits\HasRoles;
 
 class MateriController extends Controller implements HasMiddleware
 {
+    use  HasRoles;
     /**
      * Get the middleware that should be assigned to the controller.
      */
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:materi-list|materi-create|materi-edit|materi-delete', only: ['index', 'show']),
+            new Middleware('permission:materi-list', only: ['index', 'show']),
             new Middleware('permission:materi-create', only: ['create', 'store']),
             new Middleware('permission:materi-edit', only: ['edit', 'update']),
             new Middleware('permission:materi-delete', only: ['destroy']),
         ];
     }
+
+
+
+    // public function index()
+    // {
+    //     $materis = Materi::where('teacher_id', Auth::id())->paginate(10);
+    //     return view('materis.index', compact('materis'));
+    // }
+
     public function index()
     {
+
+        // Check if the user is 'siswa' and 'admin'
+        if (Auth::user()->hasAnyRole(['siswa', 'admin']))  {
+        // For siswa admin, show all Materi
+        $materis = Materi::paginate(10);
+
+    // Check if the user is 'guru' (teacher)
+    } elseif (Auth::user()->hasRole('guru')) {
+        // For 'guru', show only the Materi created by the teacher
         $materis = Materi::where('teacher_id', Auth::id())->paginate(10);
+
+
+    }
+
         return view('materis.index', compact('materis'));
     }
 
+    // public function index()
+    // {
+    //     $materis = Materi::all();
+    //     return view('materis.index', compact('materis'));
+    // }
     public function create()
     {
         $mataPelajaran = MataPelajaran::all(); // Get all Mata Pelajaran for the dropdown

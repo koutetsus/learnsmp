@@ -13,7 +13,7 @@
             target="_blank"
             class="text-blue-600 hover:underline"
         >
-            Andrean Dwi Saputro
+            SMPN2KARTASURA2024
         </a>
     </p>
 </footer>

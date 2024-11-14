@@ -12,12 +12,33 @@ class UserController extends Controller
     public static function middleware(): array
     {
      return [
-           new Middleware('permission:user-list|user-create|user-useredit|user-delete', only: ['index', 'show']),
+           new Middleware('permission:user-list', only: ['index', 'show']),
            new Middleware('permission:user-create', only: ['create', 'store']),
            new Middleware('permission:user-edit', only: ['edit', 'update']),
            new Middleware('permission:user-delete', only: ['destroy']),
        ];
     }
+
+
+//       public static function middleware(): array
+// // {
+// //     return [
+// //         // Middleware for admin role with full permissions
+// //         new Middleware('role:admin|permission:materi-list|materi-create|materi-edit|materi-delete', only: ['index', 'show']),
+// //         new Middleware('role:admin|permission:materi-create', only: ['create', 'store']),
+// //         new Middleware('role:admin|permission:materi-edit', only: ['edit', 'update']),
+// //         new Middleware('role:admin|permission:materi-delete', only: ['destroy']),
+
+
+// //         new Middleware('role:guru|permission:materi-list|materi-create|materi-edit|materi-delete', only: ['index', 'show']),
+// //         new Middleware('role:guru|permission:materi-create', only: ['create', 'store']),
+// //         new Middleware('role:guru|permission:materi-edit', only: ['edit', 'update']),
+// //         new Middleware('role:guru|permission:materi-delete', only: ['destroy']),
+
+// //         // Middleware for siswa role with limited permissions
+// //         new Middleware('role:siswa|permission:materi-list', only: ['index', 'show']),
+// //     ];
+// // }
 
     public function index()
     {

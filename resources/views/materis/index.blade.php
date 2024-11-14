@@ -18,6 +18,7 @@
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr>
+                    <th class="border-b py-2 px-4 text-left">No</th>
                     <th class="border-b py-2 px-4 text-left">Mata Pelajaran</th>
                     <th class="border-b py-2 px-4 text-left">Nama Materi</th>
                     <th class="border-b py-2 px-4 text-left">Type</th>
@@ -27,13 +28,18 @@
             <tbody>
                 @foreach($materis as $materi)
                     <tr>
-                        <td class="border-b py-2 px-4">{{ $materi->mataPelajaran->name }}</td>
-                        <td class="border-b py-2 px-4">{{ $materi->title }}</td>
-                        <td class="border-b py-2 px-4">{{ ucfirst($materi->type) }}</td>
-                        <td class="border-b py-2 px-4">
+                        <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $materi->mataPelajaran->name }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $materi->title }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ ucfirst($materi->type) }}</td>
+                        <td class="border border-gray-300 px-4 py-2">
                             {{-- Check if the user has permission to edit Materi --}}
                             @can('materi-edit')
                                 <a href="{{ route('materis.edit', $materi) }}" class="text-blue-500">Edit</a>
+                            @endcan
+                            {{-- Check if the user has permission to show Materi --}}
+                            @can('materi-show')
+                                <a href="{{ route('materis.show', $materi) }}" class="text-blue-500">Show</a>
                             @endcan
 
                             {{-- Check if the user has permission to delete Materi --}}

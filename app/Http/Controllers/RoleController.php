@@ -13,7 +13,7 @@ class RoleController extends Controller
     public static function middleware(): array
     {
      return [
-           new Middleware('permission:role-list|role-create|role-edit|role-delete', only: ['index', 'show']),
+           new Middleware('permission:role-list', only: ['index', 'show']),
            new Middleware('permission:role-create', only: ['create', 'store']),
            new Middleware('permission:role-edit', only: ['edit', 'update']),
            new Middleware('permission:role-delete', only: ['destroy']),

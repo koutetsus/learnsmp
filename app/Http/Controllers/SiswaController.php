@@ -10,14 +10,14 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    public static function middleware(): array
-    {
-     return [
-           new Middleware('permission:materi-list', only: ['index', 'show']),
-           new Middleware('permission:quiz-list', only: ['index', 'show']),
+    // public static function middleware(): array
+    // {
+    //  return [
+    //        new Middleware('permission:materi-list', only: ['index', 'show']),
+    //        new Middleware('permission:quiz-list', only: ['index', 'show']),
 
-       ];
-    }
+    //    ];
+    // }
 
     //
     public function index()
