@@ -38,12 +38,25 @@
                         <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
                         <select id="type" name="type"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" onchange="showTypeFields()">
+
+                            <option value="link">Link</option>
                             <option value="document">Document</option>
                             <option value="article">Article</option>
-                            <option value="ppt">PPT</option>
                             <option value="video">Video</option>
                         </select>
                     </div>
+
+
+                        <!-- Content Field (for Link type) -->
+   <!-- Link Field (for Link type) -->
+<div id="linkField" class="hidden mb-4">
+    <label for="link" class="block text-sm font-medium text-gray-700">Link Google Drive</label>
+    <textarea id="link" name="link" rows="3"
+        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+        placeholder="Paste your link here" ></textarea>
+</div>
+
+
 
                     <!-- File Upload Field (Hidden or Visible based on Type) -->
                     <div id="fileUploadField" class="hidden mb-4">
@@ -53,20 +66,25 @@
                         <div id="filePreview" class="mt-2"></div>
                     </div>
 
-                    <!-- Content Field (for Article type) -->
-                    <div id="contentField" class="hidden mb-4">
-                        <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                            placeholder="Add your content here"></textarea>
-                    </div>
+                        <!-- Content Field (for Article type) -->
+                        <div id="contentField" class="hidden mb-4">
+                            <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+                                <textarea id="content" name="content" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                                          placeholder="Add your content here"></textarea>
+                                    </div>
 
-                    <!-- URL Field (for Document or Video) -->
+
+                    <!-- URL Field (for Video) -->
                     <div id="urlField" class="hidden mb-4">
                         <label for="url" class="block text-sm font-medium text-gray-700">Url</label>
                         <input type="text" id="url" name="url"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
+
+
                 </div>
+
+
 
                 <!-- Column for Tugas (Assignment) -->
                 <div class="basis-1/2">
@@ -106,10 +124,9 @@
         </div>
     </div>
 
-
     <!-- TinyMCE CDN -->
-    <script src="https://cdn.tiny.cloud/1/4pgdph1t0sle9a2mfzj7frhg7vva4u3kj8s48b6nk27kdk2i/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+
+        <script src="https://cdn.tiny.cloud/1/pkpz2purcjfn9blpss7j6t45hagbconqdjykkgxwoex6dqpn/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         function openModal() {
             document.getElementById('createMataPelajaranModal').classList.remove('hidden');
@@ -120,29 +137,28 @@
         }
 
         function showTypeFields() {
-            const type = document.getElementById('type').value;
-            const fileUploadField = document.getElementById('fileUploadField');
-            const contentField = document.getElementById('contentField');
-            const urlField = document.getElementById('urlField');
+    const type = document.getElementById('type').value;
+    const fileUploadField = document.getElementById('fileUploadField');
+    const contentField = document.getElementById('contentField');
+    const urlField = document.getElementById('urlField');
+    const linkField = document.getElementById('linkField');
 
-            fileUploadField.classList.add('hidden');
-            contentField.classList.add('hidden');
-            urlField.classList.add('hidden');
+    fileUploadField.classList.add('hidden');
+    contentField.classList.add('hidden');
+    urlField.classList.add('hidden');
+    linkField.classList.add('hidden');
 
-            if (type === 'document' || type === 'ppt') {
-                fileUploadField.classList.remove('hidden');
-            } else if (type === 'article') {
-                contentField.classList.remove('hidden');
-                tinymce.init({
-                    selector: '#content',
-                    menubar: false,
-                    plugins: 'lists link image',
-                    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
-                });
-            } else if (type === 'video') {
-                urlField.classList.remove('hidden');
-            }
-        }
+    if (type === 'document' || type === 'ppt') {
+        fileUploadField.classList.remove('hidden');
+    } else if (type === 'article') {
+        contentField.classList.remove('hidden');
+    } else if (type === 'video') {
+        urlField.classList.remove('hidden');
+    }
+    else if (type === 'link') {
+        linkField.classList.remove('hidden');
+    }
+}
 
         function previewFile() {
             const fileInput = document.getElementById('file');

@@ -36,6 +36,7 @@ class PermissionSeeder extends Seeder
             'view-permission',
             'view-materi',
             'view-quiz',
+            'detail-quiz',
             'view-student-scores',
             'permission-list',
             'permission-create',

@@ -25,7 +25,9 @@
                             {{ $quiz->mataPelajaran ? $quiz->mataPelajaran->name : 'No Subject' }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            @can('detail-quiz')
                             <a href="{{ route('quizzes.show', $quiz->id) }}" class="text-blue-600 hover:text-blue-900">View</a>
+                            @endcan
                             <a href="{{ route('quizzes.take', $quiz->id) }}" class="ml-4 text-blue-600 hover:text-blue-900">Take Quiz</a>
                             @can( 'quiz-delete',)
 

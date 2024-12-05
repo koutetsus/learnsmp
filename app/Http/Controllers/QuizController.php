@@ -122,20 +122,39 @@ class QuizController extends Controller
     }
 
     public function studentScores()
-    {
-        $scores = QuizResult::with('quiz', 'quiz.mataPelajaran', 'user')
-            ->get()
-            ->groupBy(function ($score) {
-                return $score->quiz->mataPelajaran->name; // Group by subject
-            })
-            ->map(function ($subjectScores) {
-                return $subjectScores->groupBy(function ($score) {
-                    return $score->quiz->title; // Group by quiz title within each subject
+{
+    $scores = QuizResult::with('quiz', 'quiz.mataPelajaran', 'user') // Mengambil semua data dari model quizresult
+    // dengan relasi quiz, quiz:mataPelajaran, user
+        ->get()
+        ->groupBy(function ($score) {
+            return $score->quiz->mataPelajaran->name; // Mengelompokkan quiz berdasarkan mata pelajaran
+        })
+        ->map(function ($subjectScores) {
+            return $subjectScores->groupBy(function ($score) {
+                return $score->quiz->title; // Mengelompokkan berdasarkan judul kuis dalam setiap mata pelajaran
+            });
+        })
+        // menambahkan logika perhitungan dari jumlah soal dengan jumlah jawaban benar
+        ->map(function ($subjectScores) {
+            return $subjectScores->map(function ($quizScores) {
+                return $quizScores->map(function ($score) {
+                    $totalQuestions = $score->quiz->questions->count(); // Menghitung jumlah soal dalam kuis
+                    $correctAnswers = $score->score; // Mengambil jumlah jawaban benar
+
+                    // Menghitung persentase nilai
+                    $percentageScore = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
+                    // Menyimpan persentase ke dalam hasil nilai
+                    $score->percentage_score = $percentageScore;
+
+                    return $score;
                 });
             });
+        });
 
-        return view('student-scores.index', ['scores' => $scores]);
-    }
+    return view('student-scores.index', ['scores' => $scores]);
+}
+
 
     public function exportStudentScoresPdf()
     {

@@ -22,8 +22,10 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('content')->nullable(); // Untuk menyimpan isi materi jika tipe adalah artikel
-            $table->enum('type', ['document', 'video', 'link', 'ppt']); // Tambahkan tipe lain jika perlu
+            $table->enum('type', ['document', 'video', 'link', 'article']); // Tambahkan tipe lain jika perlu
             $table->string('url')->nullable(); // Untuk URL atau path file
+            $table->string('link')->nullable(); // Untuk URL atau path file
+            $table->string('file')->nullable(); // To store file path
             $table->foreignId('teacher_id')->constrained('users')->onDelete('cascade'); // Relasi dengan tabel users
             $table->unsignedBigInteger('mata_pelajaran_id');
             $table->foreign('mata_pelajaran_id')->references('id')->on('mata_pelajaran')->onDelete('cascade');

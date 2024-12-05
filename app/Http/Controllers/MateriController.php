@@ -30,13 +30,6 @@ class MateriController extends Controller implements HasMiddleware
     }
 
 
-
-    // public function index()
-    // {
-    //     $materis = Materi::where('teacher_id', Auth::id())->paginate(10);
-    //     return view('materis.index', compact('materis'));
-    // }
-
     public function index()
     {
 
@@ -56,16 +49,62 @@ class MateriController extends Controller implements HasMiddleware
         return view('materis.index', compact('materis'));
     }
 
-    // public function index()
-    // {
-    //     $materis = Materi::all();
-    //     return view('materis.index', compact('materis'));
-    // }
     public function create()
     {
         $mataPelajaran = MataPelajaran::all(); // Get all Mata Pelajaran for the dropdown
         return view('materis.create', compact('mataPelajaran'));
     }
+
+    // public function store(Request $request)
+    // {
+    //     // Validate Materi data
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'content' => 'nullable|string',
+    //         'type' => 'required|string',
+    //         'url' => 'nullable|url',
+    //         'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+    //         'assignment' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+    //         'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id', // Validate mata_pelajaran_id
+    //         'link' => 'nullable|string',
+    //     ]);
+
+    //     // Store Materi data
+    //     $materi = Materi::create([
+    //         'title' => $request->input('title'),
+    //         'description' => $request->input('description'),
+    //         'content' => $request->input('content'),
+    //         'type' => $request->input('type'),
+    //         'url' => $request->input('url'),
+    //         'teacher_id' => Auth::id(),
+    //         'mata_pelajaran_id' => $request->input('mata_pelajaran_id'),
+    //     ]);
+
+    //     // Handle file upload for Materi
+    //     if ($request->hasFile('file')) {
+    //         $filePath = $request->file('file')->store('materi_files');
+    //         $materi->file = $filePath;
+    //         $materi->save();
+    //     }
+
+    //     // Handle 'link google drive' field if the type is 'link google drive'
+    //     if ($materi->type === 'link' && $request->has('link')) {
+    //         $materi->link = $request->input('link'); // Save Google Drive link if type is 'linkdrive'
+    //         $materi->save();
+    //     }
+
+    //     // Handle Assignment upload
+    //     if ($request->hasFile('assignment')) {
+    //         $assignment = new Assignment();
+    //         $assignment->materi_id = $materi->id; // Link the assignment to the created materi
+    //         $assignment->file = $request->file('assignment')->store('assignments');
+    //         $assignment->save();
+    //     }
+
+    //     return redirect()->route('materis.index')->with('success', 'Materi and Assignment saved successfully!');
+    // }
+
 
     public function store(Request $request)
     {
@@ -74,11 +113,12 @@ class MateriController extends Controller implements HasMiddleware
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'content' => 'nullable|string',
-            'type' => 'required|string',
+            'type' => 'required|in:document,article,video,link',
             'url' => 'nullable|url',
             'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
             'assignment' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
             'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id', // Validate mata_pelajaran_id
+            'link' => 'nullable|string', // Validate linkdrive field when type is 'linkdrive'
         ]);
 
         // Store Materi data
@@ -94,8 +134,14 @@ class MateriController extends Controller implements HasMiddleware
 
         // Handle file upload for Materi
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('materi_files');
+            $filePath = $request->file('file')->store('public/materi_files');
             $materi->file = $filePath;
+            $materi->save();
+        }
+
+        // Handle 'linkdrive' field if the type is 'linkdrive'
+        if ($materi->type === 'link' && $request->has('link')) {
+            $materi->link = $request->input('link'); // Save Google Drive link if type is 'linkdrive'
             $materi->save();
         }
 
@@ -107,8 +153,10 @@ class MateriController extends Controller implements HasMiddleware
             $assignment->save();
         }
 
+        // Return success message
         return redirect()->route('materis.index')->with('success', 'Materi and Assignment saved successfully!');
     }
+
 
     public function edit(Materi $materi)
     {
@@ -138,9 +186,33 @@ class MateriController extends Controller implements HasMiddleware
 
     public function show(Materi $materi)
     {
-        // Ensure only students can view the materi, you might want to add some authorization logic here
-        // This example assumes that the user is authenticated and is a student.
+
+        if ($materi->type === 'document' && $materi->file) {
+            // Generate the file URL
+            $materi->file_url = asset('storage/' . $materi->file);
+        }
+
+        if ($materi->type === 'video' && $materi->url) {
+            $materi->video_id = $this->extractYoutubeVideoId($materi->url);
+
+        }
+
+        if ($materi->type === 'link' && $materi->url) {
+            $materi->drive_link = $materi->url;  // You can store the URL directly, or perform additional processing
+        }
         return view('materis.show', compact('materi'));
     }
+
+    private function extractYoutubeVideoId($url)
+    {
+
+        if (preg_match('/(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/', $url, $matches)) {
+            return $matches[2]; // Ambil video_id
+        }
+
+        // Jika URL tidak cocok dengan pola di atas, return null
+        return null;
+    }
+
 
 }

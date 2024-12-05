@@ -14,7 +14,9 @@ class Materi extends Model
         'description',
         'content',
         'type',
+        'file',
         'url',
+        'link',
         'teacher_id',
         'mata_pelajaran_id',  // Add this line
     ];
