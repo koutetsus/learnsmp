@@ -43,6 +43,7 @@ class QuizController extends Controller
             'questions.*.text' => 'required|string',
             'questions.*.answers.*' => 'required|string',
             'questions.*.correct_answer' => 'required|integer',
+            'questions.*.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// Validasi foto
         ]);
 
         $quiz = Quiz::create([
@@ -51,10 +52,20 @@ class QuizController extends Controller
             'mata_pelajaran_id' => $validatedData['mata_pelajaran_id'],
         ]);
 
-        foreach ($validatedData['questions'] as $index => $questionData) {
-            $question = $quiz->questions()->create([
-                'question_text' => $questionData['text'],
-            ]);
+       // Menyimpan setiap pertanyaan dan jawabannya
+       foreach ($validatedData['questions'] as $index => $questionData) {
+        // Mengecek apakah ada file foto untuk pertanyaan
+        $photoPath = null;
+        if ($request->hasFile('questions.' . $index . '.photo')) {
+            // Menyimpan foto ke storage/public/questions_photo
+            $photoPath = $request->file('questions.' . $index . '.photo')->store('public/questions_photo');
+        }
+
+       // Membuat question baru
+       $question = $quiz->questions()->create([
+        'question_text' => $questionData['text'],
+        'photo' => $photoPath ? basename($photoPath) : null, // Menyimpan nama file gambar
+    ]);
 
             foreach ($questionData['answers'] as $answerIndex => $answerText) {
                 $isCorrect = ($questionData['correct_answer'] == $answerIndex + 1);

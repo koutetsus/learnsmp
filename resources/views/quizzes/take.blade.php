@@ -10,6 +10,14 @@
             @foreach ($quiz->questions as $question)
                 <div class="mb-6">
                     <p class="text-lg font-semibold">{{ $question->question_text }}</p>
+
+                    <!-- Display Photo if exists -->
+                    @if ($question->photo)
+                    <div class="mt-2 mb-4 flex text-center">
+                        <img src="{{ asset('storage/questions_photo/' . $question->photo) }}" alt="Question Image" class="max-w-xs mx-auto">
+                    </div>
+                    @endif
+
                     <div class="mt-2">
                         @foreach ($question->answers as $answer)
                             <div class="flex items-center space-x-2 mb-2">
