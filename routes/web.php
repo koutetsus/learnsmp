@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::get('materis/{materi}', [MateriController::class, 'show'])->name('materis.show');
     Route::get('/materis/{id}/pdf', [MateriController::class, 'displayPdf'])->name('materis.displayPdf');
     Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
+    Route::resource('submissions', SubmissionController::class);
+
 
     Route::resource('quizzes', QuizController::class);
     Route::post('/mata-pelajaran', [MataPelajaranController::class, 'store'])->name('mataPelajaran.store');

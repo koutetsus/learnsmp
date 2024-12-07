@@ -42,6 +42,8 @@ class PermissionSeeder extends Seeder
             'permission-create',
             'permission-edit',
             'permission-delete',
+            'view-submissions',
+            'view-formtugas',
         ];
 
         // Create permissions
@@ -58,7 +60,7 @@ class PermissionSeeder extends Seeder
         // Guru Role - Limited Access
         $guruPermissions = [
             'materi-list', 'materi-create', 'materi-edit', 'materi-delete',
-            'quiz-list', 'quiz-create', 'quiz-edit', 'quiz-delete',
+            'quiz-list', 'quiz-create', 'quiz-edit', 'quiz-delete','view-submissions','view-formtugas',
         ];
         $guruRole = Role::firstOrCreate(['name' => 'guru']);
         $guruRole->syncPermissions($guruPermissions);

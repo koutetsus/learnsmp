@@ -179,6 +179,10 @@
 
                                 <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Submit Assignment</button>
                             </form>
+                            @can('view-submissions')
+                            <a href="{{ route('submissions.index', $assignment->id) }}"
+                            class="px-4 py-2 bg-blue-500 text-white rounded">View Submissions</a>
+                        @endcan
 
                             <script>
                                 document.getElementById('submission_type').addEventListener('change', function () {

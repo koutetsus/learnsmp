@@ -9,6 +9,16 @@ use App\Models\Assignment;
 
 class SubmissionController extends Controller
 {
+
+    public function index()
+    {
+        // Fetch paginated list of permissions
+        $submission = Submission::paginate(10);
+        return view('submissions.index', compact('submission'));
+    }
+
+
+
     //
     public function store(Request $request)
     {

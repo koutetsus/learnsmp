@@ -64,6 +64,19 @@
     </x-sidebar.link>
     @endcan
 
+
+    @can('view-formtugas')
+    <x-sidebar.link
+        title="Submitted"
+        href="{{ route('submissions.index') }}"
+        :isActive="request()->routeIs('submissions.index')"
+    >
+        <x-slot name="icon">
+            <x-heroicon-o-book-open class="flex-shrink-0 w-6 h-6" aria-hidden="true"/>
+        </x-slot>
+    </x-sidebar.link>
+    @endcan
+
     @can('view-quiz')
     <x-sidebar.link
         title="Quiz"
