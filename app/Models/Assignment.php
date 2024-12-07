@@ -9,11 +9,16 @@ class Assignment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['file', 'materi_id'];
+    protected $fillable = ['assignments_file', 'materi_id','assignments_type','assignments_link','assignments_content',];
 
     // Define relationship to Materi
     public function materi()
     {
         return $this->belongsTo(Materi::class);
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
     }
 }

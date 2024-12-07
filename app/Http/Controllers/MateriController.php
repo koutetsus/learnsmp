@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Materi;
 use App\Models\Assignment;
+use App\Models\Submission;
 use Illuminate\Http\Request;
 use App\Models\MataPelajaran;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller implements HasMiddleware
 {
@@ -116,12 +118,15 @@ class MateriController extends Controller implements HasMiddleware
             'type' => 'required|in:document,article,video,link',
             'url' => 'nullable|url',
             'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
-            'assignment' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+            'assignments_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+            'assignments_type' => 'required|in:document,article,link',
+            'assignments_link' => 'nullable|url', // Validasi untuk link assignment
+            'assignments_content' => 'nullable|string', // Validasi untuk artikel content
             'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id', // Validate mata_pelajaran_id
             'link' => 'nullable|string', // Validate linkdrive field when type is 'linkdrive'
         ]);
 
-        // Store Materi data
+        // Store Materi dan tugas data
         $materi = Materi::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -145,13 +150,68 @@ class MateriController extends Controller implements HasMiddleware
             $materi->save();
         }
 
-        // Handle Assignment upload
-        if ($request->hasFile('assignment')) {
-            $assignment = new Assignment();
-            $assignment->materi_id = $materi->id; // Link the assignment to the created materi
-            $assignment->file = $request->file('assignment')->store('assignments');
-            $assignment->save();
-        }
+
+        //   // Menangani Assignment
+        //   $assignment = new Assignment();
+        //   $assignment->materi_id = $materi->id;
+        //   $assignmentType = $request->input('assignments_type');
+
+        //   // If the assignment is a document (file)
+        //   if ($assignmentType === 'document' && $request->hasFile('assignments_file')) {
+        //       $file = $request->file('assignments_file');
+        //       $filePath = $file->storeAs('public/assignments_files', $file->getClientOriginalName());
+        //       $assignment->file = $filePath;
+        //       $assignment->type = $file->getClientOriginalExtension(); // Store the file extension as the type
+        //   }
+
+        //   // If the assignment is a link
+        //   elseif ($assignmentType === 'link' && $request->has('assignments_link')) {
+        //       $assignment->assignments_link = $request->input('assignments_link');
+        //   }
+
+        //   // If the assignment is an article
+        //   elseif ($assignmentType === 'article' && $request->has('assignments_content')) {
+        //       $assignment->assignments_content = $request->input('assignments_content');
+        //   }
+
+        //   // Save the assignment
+        //   $assignment->save();
+
+        // Menangani Assignment
+                $assignment = new Assignment();
+                $assignment->materi_id = $materi->id;
+                $assignmentType = $request->input('assignments_type');
+
+                // If the assignment is a document (file)
+                if ($assignmentType === 'document') {
+                    if ($request->hasFile('assignments_file')) {
+                        $file = $request->file('assignments_file');
+                        // Store file with a unique name to avoid overwriting existing files
+                        $filePath = $file->storeAs('public/assignments_files', $file->getClientOriginalName());
+                        $assignment->assignments_file = $filePath; // Store file path in the assignments_file column
+                    } else {
+                        // Optionally, you can add validation here to ensure that a file is required for the 'document' type
+                        // Or, handle it by setting an error message if no file is uploaded for document type
+                    }
+                }
+
+                // If the assignment is a link
+                elseif ($assignmentType === 'link' && $request->has('assignments_link')) {
+                    $assignment->assignments_link = $request->input('assignments_link');
+                }
+
+                // If the assignment is an article
+                elseif ($assignmentType === 'article' && $request->has('assignments_content')) {
+                    $assignment->assignments_content = $request->input('assignments_content');
+                }
+
+                // Set the assignment type
+                $assignment->assignments_type = $assignmentType; // Ensure the assignment type is saved in the database
+
+                // Save the assignment
+                $assignment->save();
+
+
 
         // Return success message
         return redirect()->route('materis.index')->with('success', 'Materi and Assignment saved successfully!');
@@ -187,19 +247,28 @@ class MateriController extends Controller implements HasMiddleware
     public function show(Materi $materi)
     {
 
+        $materi->load('assignments');
+        // Untuk Materi
         if ($materi->type === 'document' && $materi->file) {
             // Generate the file URL
             $materi->file_url = asset('storage/' . $materi->file);
         }
+
+
 
         if ($materi->type === 'video' && $materi->url) {
             $materi->video_id = $this->extractYoutubeVideoId($materi->url);
 
         }
 
-        if ($materi->type === 'link' && $materi->url) {
-            $materi->drive_link = $materi->url;  // You can store the URL directly, or perform additional processing
+        if ($materi->type === 'link' && $materi->link) {
+            $materi->link;  // You can store the URL directly, or perform additional processing
         }
+
+
+
+
+
         return view('materis.show', compact('materi'));
     }
 
@@ -213,6 +282,32 @@ class MateriController extends Controller implements HasMiddleware
         // Jika URL tidak cocok dengan pola di atas, return null
         return null;
     }
+
+
+    public function displayPdf($id)
+{
+    $materi = Materi::findOrFail($id);
+
+    // Periksa apakah file ada dan valid
+    if (!$materi->file || !Storage::exists($materi->file)) {
+        return redirect()->route('materis.index')->with('error', 'File not found.');
+    }
+
+    // Dapatkan tipe MIME file
+    $mimeType = Storage::mimeType($materi->file);
+
+    // Pastikan file adalah PDF
+    if ($mimeType !== 'application/pdf') {
+        return redirect()->route('materis.index')->with('error', 'The file is not a PDF.');
+    }
+
+    // Tampilkan file PDF langsung di browser
+    return response()->file(Storage::path($materi->file), [
+        'Content-Type' => $mimeType,
+        'Content-Disposition' => 'inline', // Pastikan file ditampilkan, bukan diunduh
+    ]);
+}
+
 
 
 }

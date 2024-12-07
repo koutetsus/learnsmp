@@ -31,5 +31,13 @@ class Materi extends Model
     return $this->belongsTo(MataPelajaran::class, 'mata_pelajaran_id');
 }
 
+    // Relasi satu ke banyak dengan Assignment
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+
+
 
 }

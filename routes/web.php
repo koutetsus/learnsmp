@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\SubmissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('materis', MateriController::class);
     Route::get('materis/{materi}', [MateriController::class, 'show'])->name('materis.show');
+    Route::get('/materis/{id}/pdf', [MateriController::class, 'displayPdf'])->name('materis.displayPdf');
+    Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
+
     Route::resource('quizzes', QuizController::class);
     Route::post('/mata-pelajaran', [MataPelajaranController::class, 'store'])->name('mataPelajaran.store');
 
