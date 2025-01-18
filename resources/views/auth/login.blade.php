@@ -1,11 +1,27 @@
 <x-guest-layout>
     <x-auth-card>
+        <!-- Teks di atas logo -->
+        <div class="text-center mb-4">
+            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                {{ __('Selamat Datang Di E-learning SMPN 2 Kartasura') }}
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                {{ __('Log in untuk mengakses akunmu') }}
+            </p>
+        </div>
+
+        <!-- Logo -->
+        <div class="flex justify-center mb-6">
+            <img src="{{ asset('storage/images/smpn2-6.png') }}" alt="Logo" class="w-20 h-20">
+        </div>
+
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
+        <!-- Form Input -->
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -69,7 +85,7 @@
                             type="checkbox"
                             class="text-purple-500 border-gray-300 rounded focus:border-purple-300 focus:ring focus:ring-purple-500 dark:border-gray-600 dark:bg-dark-eval-1 dark:focus:ring-offset-dark-eval-1"
                             name="remember"
-                        >
+                        />
 
                         <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
                             {{ __('Remember me') }}
@@ -83,6 +99,7 @@
                     @endif
                 </div>
 
+                <!-- Login Button -->
                 <div>
                     <x-button class="justify-center w-full gap-2">
                         <x-heroicon-o-login class="w-6 h-6" aria-hidden="true" />
@@ -91,6 +108,7 @@
                     </x-button>
                 </div>
 
+                <!-- Register Link -->
                 @if (Route::has('register'))
                     <p class="text-sm text-gray-600 dark:text-gray-400">
                         {{ __('Don’t have an account?') }}

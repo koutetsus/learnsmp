@@ -59,15 +59,15 @@ class PermissionSeeder extends Seeder
 
         // Guru Role - Limited Access
         $guruPermissions = [
-            'materi-list', 'materi-create', 'materi-edit', 'materi-delete',
-            'quiz-list', 'quiz-create', 'quiz-edit', 'quiz-delete','view-submissions','view-formtugas',
+             'view-materi','materi-list', 'materi-create', 'materi-edit', 'materi-delete',
+            'view-quiz','quiz-list', 'quiz-create', 'quiz-edit', 'quiz-delete','view-submissions','view-formtugas',
         ];
         $guruRole = Role::firstOrCreate(['name' => 'guru']);
         $guruRole->syncPermissions($guruPermissions);
 
         // Siswa Role - View Access Only
         $siswaPermissions = [
-            'materi-list', 'quiz-list',
+             'view-materi','materi-list', 'quiz-list','view-quiz','view-formtugas',
         ];
         $siswaRole = Role::firstOrCreate(['name' => 'siswa']);
         $siswaRole->syncPermissions($siswaPermissions);

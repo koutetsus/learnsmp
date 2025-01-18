@@ -54,7 +54,7 @@
 
     @can('view-materi')
     <x-sidebar.link
-        title="Materi"
+        title="Materi Dan Tugas"
         href="{{ route('materis.index') }}"
         :isActive="request()->routeIs('materis.index')"
     >
@@ -67,7 +67,7 @@
 
     @can('view-formtugas')
     <x-sidebar.link
-        title="Submitted"
+        title="Pengumpulan Tugas"
         href="{{ route('submissions.index') }}"
         :isActive="request()->routeIs('submissions.index')"
     >
@@ -79,7 +79,7 @@
 
     @can('view-quiz')
     <x-sidebar.link
-        title="Quiz"
+        title="Latihan Soal / Quiz"
         href="{{ route('quizzes.index') }}"
         :isActive="request()->routeIs('quizzes.index')"
     >
@@ -91,7 +91,7 @@
 
     @can('view-student-scores')
     <x-sidebar.link
-    title="Student Score"
+    title="Nilai"
     href="{{ route('student-scores') }}"
     :isActive="request()->routeIs('student-scores')"
     >

@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container mx-auto border-2 border-solid p-4">
-        <h1 class="text-2xl font-bold mb-4">Create User</h1>
+        <h1 class="text-2xl font-bold mb-4">Tambah User</h1>
 
         <form action="{{ route('users.store') }}" method="POST">
             @csrf

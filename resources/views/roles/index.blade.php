@@ -5,7 +5,7 @@
 
              {{-- Check if the user has permission to create a new role --}}
              @can('role-create')
-             <a href="{{ route('roles.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Create New Role</a>
+             <a href="{{ route('roles.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah Role</a>
              @endcan
             </div>
 
@@ -31,11 +31,11 @@
                         <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
                         <td class="border border-gray-300 py-2 px-4">{{ $role->name }}</td>
                         <td class="border border-gray-300 py-2 px-4">
-                            <a href="{{ route('roles.edit', $role) }}" class="text-blue-500">Edit</a>
+                            <a href="{{ route('roles.edit', $role) }}" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</a>
                             <form action="{{ route('roles.destroy', $role) }}" method="POST" class="inline-block ml-2">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500">Delete</button>
+                                <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </form>
                         </td>
                     </tr>

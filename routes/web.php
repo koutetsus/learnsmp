@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/materis/{id}/pdf', [MateriController::class, 'displayPdf'])->name('materis.displayPdf');
     Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
     Route::resource('submissions', SubmissionController::class);
+    Route::get('submissions/{id}/download', [SubmissionController::class, 'download'])->name('submissions.download');
+
 
 
     Route::resource('quizzes', QuizController::class);

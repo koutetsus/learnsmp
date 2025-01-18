@@ -23,4 +23,8 @@ class MataPelajaran extends Model
     {
         return $this->hasMany(Quiz::class, 'mata_pelajaran_id');
     }
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }

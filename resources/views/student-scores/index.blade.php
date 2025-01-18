@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h1 class="text-xl font-bold">Student Scores</h1>
+        <h1 class="text-xl font-bold">Nilai Siswa</h1>
     </x-slot>
 
     <div class="space-y-6">
@@ -14,15 +14,15 @@
                             <table class="min-w-full divide-y divide-gray-200 mt-2">
                                 <thead>
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">User Name</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Total Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Nama Siswa</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500">Nilai</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($quizScores as $score)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $score->user->name }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $score->percentage_score }}%</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $score->percentage_score }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

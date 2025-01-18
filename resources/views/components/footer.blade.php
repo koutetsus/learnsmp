@@ -2,18 +2,18 @@
     <p class="flex items-center justify-center gap-1 text-sm text-gray-600 dark:text-gray-400">
         <span>Made</span>
 
-        <span>
+        {{-- <span>
             <x-heroicon-s-heart class="w-6 h-6 text-red-500" />
-        </span>
+        </span> --}}
 
-        <span>by</span>
+        <span>By</span>
 
         <a
-            href="https://github.com/koutetsus"
-            target="_blank"
-            class="text-blue-600 hover:underline"
+            {{-- href="https://github.com/koutetsus" --}}
+            {{-- target="_blank"
+            class="text-blue-600 hover:underline" --}}
         >
-            SMPN2KARTASURA2024
+            SMP N 2 KARTASURA 2025
         </a>
     </p>
 </footer>

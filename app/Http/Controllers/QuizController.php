@@ -34,8 +34,54 @@ class QuizController extends Controller
         return view('quizzes.create', compact('subjects'));
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id',
+    //         'questions.*.text' => 'required|string',
+    //         'questions.*.answers.*' => 'required|string',
+    //         'questions.*.correct_answer' => 'required|integer',
+    //         'questions.*.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// Validasi foto
+    //     ]);
+
+    //     $quiz = Quiz::create([
+    //         'title' => $validatedData['title'],
+    //         'description' => $validatedData['description'],
+    //         'mata_pelajaran_id' => $validatedData['mata_pelajaran_id'],
+    //     ]);
+
+    //    // Menyimpan setiap pertanyaan dan jawabannya
+    //    foreach ($validatedData['questions'] as $index => $questionData) {
+    //     // Mengecek apakah ada file foto untuk pertanyaan
+    //     $photoPath = null;
+    //     if ($request->hasFile('questions.' . $index . '.photo')) {
+    //         // Menyimpan foto ke storage/public/questions_photo
+    //         $photoPath = $request->file('questions.' . $index . '.photo')->store('public/questions_photo');
+    //     }
+
+    //    // Membuat question baru
+    //    $question = $quiz->questions()->create([
+    //     'question_text' => $questionData['text'],
+    //     'photo' => $photoPath ? basename($photoPath) : null, // Menyimpan nama file gambar
+    // ]);
+
+    //         foreach ($questionData['answers'] as $answerIndex => $answerText) {
+    //             $isCorrect = ($questionData['correct_answer'] == $answerIndex + 1);
+    //             $question->answers()->create([
+    //                 'answer_text' => $answerText,
+    //                 'is_correct' => $isCorrect,
+    //             ]);
+    //         }
+    //     }
+
+    //     return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully.');
+    // }
+
     public function store(Request $request)
     {
+        // Validasi input
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -43,41 +89,68 @@ class QuizController extends Controller
             'questions.*.text' => 'required|string',
             'questions.*.answers.*' => 'required|string',
             'questions.*.correct_answer' => 'required|integer',
-            'questions.*.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// Validasi foto
+            'questions.*.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:25068', // Validasi foto (opsional)
         ]);
 
-        $quiz = Quiz::create([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'mata_pelajaran_id' => $validatedData['mata_pelajaran_id'],
-        ]);
+        DB::transaction(function () use ($validatedData, $request) {
+            // Insert quiz using insert (bulk insert)
+            $quizData = [
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'mata_pelajaran_id' => $validatedData['mata_pelajaran_id'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
 
-       // Menyimpan setiap pertanyaan dan jawabannya
-       foreach ($validatedData['questions'] as $index => $questionData) {
-        // Mengecek apakah ada file foto untuk pertanyaan
-        $photoPath = null;
-        if ($request->hasFile('questions.' . $index . '.photo')) {
-            // Menyimpan foto ke storage/public/questions_photo
-            $photoPath = $request->file('questions.' . $index . '.photo')->store('public/questions_photo');
-        }
+            // Insert quiz into the database
+            $quizId = DB::table('quizzes')->insertGetId($quizData);
 
-       // Membuat question baru
-       $question = $quiz->questions()->create([
-        'question_text' => $questionData['text'],
-        'photo' => $photoPath ? basename($photoPath) : null, // Menyimpan nama file gambar
-    ]);
+            // Prepare data for questions and answers
+            $questionsData = [];
+            $answersData = [];
+            foreach ($validatedData['questions'] as $index => $questionData) {
+                // Handle question photo only if exists
+                $photoPath = null;
+                if (isset($questionData['photo']) && $request->hasFile("questions.$index.photo")) {
+                    $photoPath = $request->file("questions.$index.photo")->store('public/questions_photo');
+                }
 
-            foreach ($questionData['answers'] as $answerIndex => $answerText) {
-                $isCorrect = ($questionData['correct_answer'] == $answerIndex + 1);
-                $question->answers()->create([
-                    'answer_text' => $answerText,
-                    'is_correct' => $isCorrect,
-                ]);
+                // Prepare question data
+                $questionsData[] = [
+                    'quiz_id' => $quizId,
+                    'question_text' => $questionData['text'],
+                    'photo' => $photoPath ? basename($photoPath) : null,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
-        }
+
+            // Bulk insert questions
+            DB::table('questions')->insert($questionsData);
+
+            // Retrieve inserted questions to associate answers
+            $insertedQuestions = DB::table('questions')->where('quiz_id', $quizId)->get();
+
+            foreach ($insertedQuestions as $i => $question) {
+                $questionData = $validatedData['questions'][$i];
+                foreach ($questionData['answers'] as $answerIndex => $answerText) {
+                    $answersData[] = [
+                        'question_id' => $question->id,
+                        'answer_text' => $answerText,
+                        'is_correct' => ($questionData['correct_answer'] == $answerIndex + 1),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+            }
+
+            // Bulk insert answers
+            DB::table('answers')->insert($answersData);
+        });
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully.');
     }
+
 
     public function index()
     {

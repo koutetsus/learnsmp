@@ -24,4 +24,14 @@ class Submission extends Model
     {
         return $this->belongsTo(Assignment::class);
     }
+
+            public function materi()
+        {
+            return $this->belongsTo(Materi::class);
+        }
+
+        public function mataPelajaran()
+        {
+            return $this->belongsTo(MataPelajaran::class, 'mata_pelajaran_id');
+        }
 }

@@ -177,12 +177,12 @@
                                     <textarea name="submission_content" id="submission_content" rows="4" class="mt-1 block w-full"></textarea>
                                 </div>
 
-                                <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Submit Assignment</button>
+                                <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Upload Tugas</button>
                             </form>
-                            @can('view-submissions')
+                            {{-- @can('view-submissions')
                             <a href="{{ route('submissions.index', $assignment->id) }}"
                             class="px-4 py-2 bg-blue-500 text-white rounded">View Submissions</a>
-                        @endcan
+                        @endcan --}}
 
                             <script>
                                 document.getElementById('submission_type').addEventListener('change', function () {

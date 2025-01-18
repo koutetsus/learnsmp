@@ -5,7 +5,7 @@
 
             {{-- Check if the user has permission to create Materi --}}
             @can('materi-create')
-                <a href="{{ route('materis.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Add New Materi</a>
+                <a href="{{ route('materis.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah Materi</a>
             @endcan
         </div>
 
@@ -35,19 +35,19 @@
                         <td class="border border-gray-300 px-4 py-2">
                             {{-- Check if the user has permission to edit Materi --}}
                             @can('materi-edit')
-                                <a href="{{ route('materis.edit', $materi) }}" class="text-blue-500">Edit</a>
+                                <a href="{{ route('materis.edit', $materi) }}" class="bg-blue-500 text-white px-2 py-1 rounded">Edit</a>
                             @endcan
                             {{-- Check if the user has permission to show Materi --}}
                             @can('materi-show')
-                                <a href="{{ route('materis.show', $materi) }}" class="text-blue-500">Show</a>
+                                <a href="{{ route('materis.show', $materi) }}" class="bg-blue-500 text-white px-2 py-1 rounded">Show</a>
                             @endcan
 
                             {{-- Check if the user has permission to delete Materi --}}
                             @can('materi-delete')
-                                <form action="{{ route('materis.destroy', $materi) }}" method="POST" class="inline-block ml-2">
+                                <form action="{{ route('materis.destroy', $materi) }}" method="POST" class="inline-block">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500">Delete</button>
+                                    <button type="submit" class="bg-red-500 text-white px-1 py-1 rounded">Delete</button>
                                 </form>
                             @endcan
                         </td>

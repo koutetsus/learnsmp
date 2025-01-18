@@ -1,5 +1,16 @@
 <x-guest-layout>
     <x-auth-card>
+
+
+         <!-- Teks di atas logo -->
+         <div class="text-center mb-4">
+            <p class="text-xl font-semibold text-gray-700 dark:text-gray-300">
+                {{ __('Selamat Datang Di E-learning SMPN 2 Kartasura') }}
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                {{ __('Register Sekarang !!') }}
+            </p>
+        </div>
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 

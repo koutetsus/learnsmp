@@ -5,7 +5,7 @@
             <div class="flex flex-col sm:flex-row gap-8">
                 <!-- Column for Materi -->
                 <div class="sm:basis-1/2">
-                    <h1 class="text-2xl font-semibold mb-6">Add New Materi</h1>
+                    <h1 class="text-2xl font-semibold mb-6">Tambah Materi</h1>
 
                     <!-- Mata Pelajaran -->
                     <div class="mb-4">
@@ -71,7 +71,7 @@
 
                     <div class="mb-4">
                         <label for="assignments_type" class="block text-sm font-medium text-gray-700">Assignment Type</label>
-                        <select id="assignments_type" name="assignments_type" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <select id="assignments_type" name="assignments_type" class="w-full border-gray-300 rounded-md shadow-sm" onchange="showAssignmentFields()">
                             <option value="link">Link</option>
                             <option value="document">Document</option>
                             <option value="article">Article</option>
@@ -102,143 +102,51 @@
         </form>
     </div>
 
-
-          <!-- Modal -->
-          <div id="createMataPelajaranModal"
-          class="fixed inset-0 z-50 hidden bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-          <h2 class="text-xl font-semibold mb-4">Create New Mata Pelajaran</h2>
-          <form id="createMataPelajaranForm" method="POST" action="{{ route('mataPelajaran.store') }}">
-              @csrf
-              <div class="mb-4">
-                  <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                  <input type="text" id="name" name="name"
-                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-              </div>
-              <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save</button>
-              <button type="button" onclick="closeModal()"
-                  class="ml-2 bg-red-500 text-white px-4 py-2 rounded-md">Cancel</button>
-          </form>
-      </div>
-          </div>
-
-
-
-    <!-- TinyMCE CDN -->
-
-<script src="https://cdn.tiny.cloud/1/pkpz2purcjfn9blpss7j6t45hagbconqdjykkgxwoex6dqpn/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-<script>
-function openModal() {
-document.getElementById('createMataPelajaranModal').classList.remove('hidden');
-}
-
-function closeModal() {
-document.getElementById('createMataPelajaranModal').classList.add('hidden');
-}
-
-function showTypeFields() {
-const type = document.getElementById('type').value;
-const fileUploadField = document.getElementById('fileUploadField');
-const contentField = document.getElementById('contentField');
-const urlField = document.getElementById('urlField');
-const linkField = document.getElementById('linkField');
-
-fileUploadField.classList.add('hidden');
-contentField.classList.add('hidden');
-urlField.classList.add('hidden');
-linkField.classList.add('hidden');
-
-if (type === 'document' || type === 'ppt') {
-fileUploadField.classList.remove('hidden');
-} else if (type === 'article') {
-contentField.classList.remove('hidden');
-} else if (type === 'video') {
-urlField.classList.remove('hidden');
-}
-else if (type === 'link') {
-linkField.classList.remove('hidden');
-}
-}
-
-function previewFile() {
-const fileInput = document.getElementById('file');
-const filePreview = document.getElementById('filePreview');
-filePreview.innerHTML = '';
-
-if (fileInput.files && fileInput.files[0]) {
-    const file = fileInput.files[0];
-    const fileType = file.type;
-
-    if (fileType.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.classList.add('w-full');
-            filePreview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    } else if (fileType === 'application/pdf') {
-        const url = URL.createObjectURL(file);
-        const iframe = document.createElement('iframe');
-        iframe.src = url;
-        iframe.classList.add('w-full', 'h-60');
-        filePreview.appendChild(iframe);
-    } else {
-        filePreview.innerText = 'Cannot preview this file type.';
-    }
-}
-}
-
-function previewAssignment() {
-const assignmentInput = document.getElementById('assignment');
-const assignmentPreview = document.getElementById('assignmentPreview');
-assignmentPreview.innerHTML = '';
-
-if (assignmentInput.files && assignmentInput.files[0]) {
-    const file = assignmentInput.files[0];
-    const fileType = file.type;
-
-    if (fileType.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.classList.add('w-full');
-            assignmentPreview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    } else if (fileType === 'application/pdf') {
-        const url = URL.createObjectURL(file);
-        const iframe = document.createElement('iframe');
-        iframe.src = url;
-        iframe.classList.add('w-full', 'h-60');
-        assignmentPreview.appendChild(iframe);
-    } else {
-        assignmentPreview.innerText = 'Cannot preview this file type.';
-    }
-}
-}
-</script>
-</div>
+    <!-- Modal -->
+    <div id="createMataPelajaranModal" class="fixed inset-0 z-50 hidden bg-gray-500 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 class="text-xl font-semibold mb-4">Create New Mata Pelajaran</h2>
+            <form id="createMataPelajaranForm" method="POST" action="{{ route('mataPelajaran.store') }}">
+                @csrf
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" id="name" name="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save</button>
+                <button type="button" onclick="closeModal()" class="ml-2 bg-red-500 text-white px-4 py-2 rounded-md">Cancel</button>
+            </form>
+        </div>
+    </div>
 
     <script>
-        // Handle dynamic form fields based on assignment type selection
-        document.querySelector('[name="assignments_type"]').addEventListener('change', function() {
-            var assignmentType = this.value;
-            document.querySelectorAll('.assignment-field').forEach(function(field) {
-                field.classList.add('hidden'); // Hide all fields
-            });
+        function openModal() {
+            document.getElementById('createMataPelajaranModal').classList.remove('hidden');
+        }
 
-            if (assignmentType === 'document') {
-                document.getElementById('document_field').classList.remove('hidden'); // Show document field
-            } else if (assignmentType === 'link') {
-                document.getElementById('link_field').classList.remove('hidden'); // Show link field
-            } else if (assignmentType === 'article') {
-                document.getElementById('article_field').classList.remove('hidden'); // Show article field
-            }
-        });
+        function closeModal() {
+            document.getElementById('createMataPelajaranModal').classList.add('hidden');
+        }
+
+        function showTypeFields() {
+            const type = document.getElementById('type').value;
+            document.getElementById('linkField').classList.add('hidden');
+            document.getElementById('fileUploadField').classList.add('hidden');
+            document.getElementById('contentField').classList.add('hidden');
+            document.getElementById('urlField').classList.add('hidden');
+
+            if (type === 'link') document.getElementById('linkField').classList.remove('hidden');
+            if (type === 'document') document.getElementById('fileUploadField').classList.remove('hidden');
+            if (type === 'article') document.getElementById('contentField').classList.remove('hidden');
+            if (type === 'video') document.getElementById('urlField').classList.remove('hidden');
+        }
+
+        function showAssignmentFields() {
+            const assignmentType = document.getElementById('assignments_type').value;
+            document.querySelectorAll('.assignment-field').forEach(field => field.classList.add('hidden'));
+
+            if (assignmentType === 'link') document.getElementById('link_field').classList.remove('hidden');
+            if (assignmentType === 'document') document.getElementById('document_field').classList.remove('hidden');
+            if (assignmentType === 'article') document.getElementById('article_field').classList.remove('hidden');
+        }
     </script>
-</div>
-
 </x-app-layout>

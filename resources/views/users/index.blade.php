@@ -5,7 +5,7 @@
 
             {{-- Check if the user has permission to create a new user --}}
             @can('user-create')
-                <a href="{{ route('users.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Create User</a>
+                <a href="{{ route('users.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah User</a>
             @endcan
         </div>
 

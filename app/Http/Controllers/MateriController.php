@@ -14,6 +14,8 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
 
 class MateriController extends Controller implements HasMiddleware
 {
@@ -64,15 +66,18 @@ class MateriController extends Controller implements HasMiddleware
     //         'title' => 'required|string|max:255',
     //         'description' => 'nullable|string',
     //         'content' => 'nullable|string',
-    //         'type' => 'required|string',
+    //         'type' => 'required|in:document,article,video,link',
     //         'url' => 'nullable|url',
     //         'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
-    //         'assignment' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+    //         'assignments_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+    //         'assignments_type' => 'required|in:document,article,link',
+    //         'assignments_link' => 'nullable|url', // Validasi untuk link assignment
+    //         'assignments_content' => 'nullable|string', // Validasi untuk artikel content
     //         'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id', // Validate mata_pelajaran_id
-    //         'link' => 'nullable|string',
+    //         'link' => 'nullable|string', // Validate linkdrive field when type is 'linkdrive'
     //     ]);
 
-    //     // Store Materi data
+    //     // Store Materi dan tugas data
     //     $materi = Materi::create([
     //         'title' => $request->input('title'),
     //         'description' => $request->input('description'),
@@ -85,48 +90,79 @@ class MateriController extends Controller implements HasMiddleware
 
     //     // Handle file upload for Materi
     //     if ($request->hasFile('file')) {
-    //         $filePath = $request->file('file')->store('materi_files');
+    //         $filePath = $request->file('file')->store('public/materi_files');
     //         $materi->file = $filePath;
     //         $materi->save();
     //     }
 
-    //     // Handle 'link google drive' field if the type is 'link google drive'
+    //     // Handle 'linkdrive' field if the type is 'linkdrive'
     //     if ($materi->type === 'link' && $request->has('link')) {
     //         $materi->link = $request->input('link'); // Save Google Drive link if type is 'linkdrive'
     //         $materi->save();
     //     }
 
-    //     // Handle Assignment upload
-    //     if ($request->hasFile('assignment')) {
-    //         $assignment = new Assignment();
-    //         $assignment->materi_id = $materi->id; // Link the assignment to the created materi
-    //         $assignment->file = $request->file('assignment')->store('assignments');
-    //         $assignment->save();
-    //     }
 
+    //     // Menangani Assignment
+    //             $assignment = new Assignment();
+    //             $assignment->materi_id = $materi->id;
+    //             $assignmentType = $request->input('assignments_type');
+
+    //             // If the assignment is a document (file)
+    //             if ($assignmentType === 'document') {
+    //                 if ($request->hasFile('assignments_file')) {
+    //                     $file = $request->file('assignments_file');
+    //                     // Store file with a unique name to avoid overwriting existing files
+    //                     $filePath = $file->storeAs('public/assignments_files', $file->getClientOriginalName());
+    //                     $assignment->assignments_file = $filePath; // Store file path in the assignments_file column
+    //                 } else {
+    //                     // Optionally, you can add validation here to ensure that a file is required for the 'document' type
+    //                     // Or, handle it by setting an error message if no file is uploaded for document type
+    //                 }
+    //             }
+
+    //             // If the assignment is a link
+    //             elseif ($assignmentType === 'link' && $request->has('assignments_link')) {
+    //                 $assignment->assignments_link = $request->input('assignments_link');
+    //             }
+
+    //             // If the assignment is an article
+    //             elseif ($assignmentType === 'article' && $request->has('assignments_content')) {
+    //                 $assignment->assignments_content = $request->input('assignments_content');
+    //             }
+
+    //             // Set the assignment type
+    //             $assignment->assignments_type = $assignmentType; // Ensure the assignment type is saved in the database
+
+    //             // Save the assignment
+    //             $assignment->save();
+
+
+
+    //     // Return success message
     //     return redirect()->route('materis.index')->with('success', 'Materi and Assignment saved successfully!');
     // }
 
-
     public function store(Request $request)
-    {
-        // Validate Materi data
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'content' => 'nullable|string',
-            'type' => 'required|in:document,article,video,link',
-            'url' => 'nullable|url',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
-            'assignments_file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
-            'assignments_type' => 'required|in:document,article,link',
-            'assignments_link' => 'nullable|url', // Validasi untuk link assignment
-            'assignments_content' => 'nullable|string', // Validasi untuk artikel content
-            'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id', // Validate mata_pelajaran_id
-            'link' => 'nullable|string', // Validate linkdrive field when type is 'linkdrive'
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'content' => 'nullable|string',
+        'type' => 'required|in:document,article,video,link',
+        'url' => 'nullable|url',
+        'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx',
+        'assignments_file' => $request->input('assignments_type') === 'document' ? 'required|file|mimes:pdf,doc,docx,ppt,pptx' : 'nullable',
+        'assignments_type' => 'required|in:document,article,link',
+        'assignments_link' => $request->input('assignments_type') === 'link' ? 'required|url' : 'nullable',
+        'assignments_content' => $request->input('assignments_type') === 'article' ? 'required|string' : 'nullable',
+        'mata_pelajaran_id' => 'required|exists:mata_pelajaran,id',
+        'link' => 'nullable|string',
+    ]);
 
-        // Store Materi dan tugas data
+    // Gunakan transaksi untuk menjaga konsistensi data
+    DB::transaction(function () use ($request) {
+        // Simpan data Materi
         $materi = Materi::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -137,85 +173,45 @@ class MateriController extends Controller implements HasMiddleware
             'mata_pelajaran_id' => $request->input('mata_pelajaran_id'),
         ]);
 
-        // Handle file upload for Materi
+        // Upload file Materi jika ada
         if ($request->hasFile('file')) {
-            $filePath = $request->file('file')->store('public/materi_files');
-            $materi->file = $filePath;
-            $materi->save();
+            $filePath = $this->uploadFile($request->file('file'), 'public/materi_files');
+            $materi->update(['file' => $filePath]);
         }
 
-        // Handle 'linkdrive' field if the type is 'linkdrive'
+        // Simpan link jika tipe adalah 'link'
         if ($materi->type === 'link' && $request->has('link')) {
-            $materi->link = $request->input('link'); // Save Google Drive link if type is 'linkdrive'
-            $materi->save();
+            $materi->update(['link' => $request->input('link')]);
         }
 
+        // Simpan data Assignment
+        $assignmentData = [
+            'materi_id' => $materi->id,
+            'assignments_type' => $request->input('assignments_type'),
+            'assignments_file' => $request->hasFile('assignments_file')
+                ? $this->uploadFile($request->file('assignments_file'), 'public/assignments_files')
+                : null,
+            'assignments_link' => $request->input('assignments_link'),
+            'assignments_content' => $request->input('assignments_content'),
+        ];
 
-        //   // Menangani Assignment
-        //   $assignment = new Assignment();
-        //   $assignment->materi_id = $materi->id;
-        //   $assignmentType = $request->input('assignments_type');
+        Assignment::create($assignmentData);
+    });
 
-        //   // If the assignment is a document (file)
-        //   if ($assignmentType === 'document' && $request->hasFile('assignments_file')) {
-        //       $file = $request->file('assignments_file');
-        //       $filePath = $file->storeAs('public/assignments_files', $file->getClientOriginalName());
-        //       $assignment->file = $filePath;
-        //       $assignment->type = $file->getClientOriginalExtension(); // Store the file extension as the type
-        //   }
+    // Kembalikan response sukses
+    return redirect()->route('materis.index')
+                     ->with('success', 'Materi dan Assignment berhasil disimpan!');
+}
 
-        //   // If the assignment is a link
-        //   elseif ($assignmentType === 'link' && $request->has('assignments_link')) {
-        //       $assignment->assignments_link = $request->input('assignments_link');
-        //   }
+            /**
+             * Fungsi untuk upload file
+             */
+            private function uploadFile($file, $path)
+            {
+                $fileName = uniqid() . '_' . $file->getClientOriginalName();
+                return $file->storeAs($path, $fileName);
+            }
 
-        //   // If the assignment is an article
-        //   elseif ($assignmentType === 'article' && $request->has('assignments_content')) {
-        //       $assignment->assignments_content = $request->input('assignments_content');
-        //   }
-
-        //   // Save the assignment
-        //   $assignment->save();
-
-        // Menangani Assignment
-                $assignment = new Assignment();
-                $assignment->materi_id = $materi->id;
-                $assignmentType = $request->input('assignments_type');
-
-                // If the assignment is a document (file)
-                if ($assignmentType === 'document') {
-                    if ($request->hasFile('assignments_file')) {
-                        $file = $request->file('assignments_file');
-                        // Store file with a unique name to avoid overwriting existing files
-                        $filePath = $file->storeAs('public/assignments_files', $file->getClientOriginalName());
-                        $assignment->assignments_file = $filePath; // Store file path in the assignments_file column
-                    } else {
-                        // Optionally, you can add validation here to ensure that a file is required for the 'document' type
-                        // Or, handle it by setting an error message if no file is uploaded for document type
-                    }
-                }
-
-                // If the assignment is a link
-                elseif ($assignmentType === 'link' && $request->has('assignments_link')) {
-                    $assignment->assignments_link = $request->input('assignments_link');
-                }
-
-                // If the assignment is an article
-                elseif ($assignmentType === 'article' && $request->has('assignments_content')) {
-                    $assignment->assignments_content = $request->input('assignments_content');
-                }
-
-                // Set the assignment type
-                $assignment->assignments_type = $assignmentType; // Ensure the assignment type is saved in the database
-
-                // Save the assignment
-                $assignment->save();
-
-
-
-        // Return success message
-        return redirect()->route('materis.index')->with('success', 'Materi and Assignment saved successfully!');
-    }
 
 
     public function edit(Materi $materi)

@@ -4,7 +4,7 @@
             <h1 class="text-2xl font-semibold">Permissions</h1>
               {{-- Check if the user has permission to create a new permission --}}
               @can('permission-create')
-            <a href="{{ route('permissions.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Create New Permission</a>
+            <a href="{{ route('permissions.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah Permission</a>
             @endcan
         </div>
 
@@ -30,11 +30,11 @@
                         <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
                         <td class="border border-gray-300 px-4">{{ $permission->name }}</td>
                         <td class="border border-gray-300 px-4">
-                            <a href="{{ route('permissions.edit', $permission) }}" class="text-blue-500">Edit</a>
-                            <form action="{{ route('permissions.destroy', $permission) }}" method="POST" class="inline-block ml-2">
+                            <a href="{{ route('permissions.edit', $permission) }}" class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</a>
+                            <form action="{{ route('permissions.destroy', $permission) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500">Delete</button>
+                                <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                             </form>
                         </td>
                     </tr>

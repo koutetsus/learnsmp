@@ -17,6 +17,11 @@ class Assignment extends Model
         return $this->belongsTo(Materi::class);
     }
 
+    public function mataPelajaran()
+{
+    return $this->belongsTo(MataPelajaran::class);
+}
+
     public function submissions()
     {
         return $this->hasMany(Submission::class);
