@@ -4,24 +4,24 @@
         <table class="table-auto w-full bg-white border border-gray-200 rounded-lg shadow-md">
             <thead>
                 <tr class="bg-gray-100 text-left">
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">No</th>
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">Mata Pelajaran</th>
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">Materi</th>
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">Siswa</th>
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">Tipe</th>
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">file</th>
-                    <th class="px-4 py-2 font-semibold text-sm text-gray-600">Di Submit pada</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-600">No</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-6000">Mata Pelajaran</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-600">Materi</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-600">Siswa</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-600">Tipe</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-600">file</th>
+                    <th class="border-b py-2 px-4 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-600">Di Submit pada</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($submission as $submission)
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-800">{{ $submission->assignment->materi->mataPelajaran->name }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-800">{{ $submission->assignment->materi->title }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-800">{{ $submission->user->name }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-800">{{ ucfirst($submission->submission_type) }}</td>
-                        <td class="px-4 py-2 text-sm text-gray-800">
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $submission->assignment->materi->mataPelajaran->name }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $submission->assignment->materi->title }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $submission->user->name }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ ucfirst($submission->submission_type) }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">
                             @if($submission->submission_type === 'document')
                                 <a href="{{ Storage::url($submission->file_path) }}" class="text-blue-500 hover:underline" target="_blank">
                                     Download file
@@ -34,7 +34,7 @@
                                 <p class="text-gray-700">{{ $submission->submission_content }}</p>
                             @endif
                         </td>
-                        <td class="px-4 py-2 text-sm text-gray-800">
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-2000">
                             {{ \Carbon\Carbon::parse($submission->submitted_at)->format('d M Y, H:i') }}
                         </td>
                     </tr>

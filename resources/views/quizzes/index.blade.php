@@ -18,13 +18,13 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($quizzes as $quiz)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $quiz->title }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $quiz->description }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $quiz->title }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">{{ $quiz->description }}</td>
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">
                             {{ $quiz->mataPelajaran ? $quiz->mataPelajaran->name : 'No Subject' }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <td class="px-4 py-2 text-left bg-gray-50 dark:bg-gray-800 dark:border-gray-200">
                             @can('detail-quiz')
                             <a href="{{ route('quizzes.show', $quiz->id) }}" class="bg-blue-500 text-white px-2 py-1 rounded">Lihat</a>
                             @endcan

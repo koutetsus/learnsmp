@@ -12,17 +12,17 @@
                     <div class="mb-4">
                         <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
                         <input type="text" id="title" name="title" value="{{ old('title', $materi->title) }}"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                     </div>
 
                     <div class="mb-4">
                         <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                         <textarea id="description" name="description" rows="3"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('description', $materi->description) }}</textarea>
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description', $materi->description) }}</textarea>
                     </div>
 
                     <div class="mb-4">
-                        <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                        <label for="type" class="block text-sm font-medium text-gray-700 ">Type</label>
                         <select id="type" name="type"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" onchange="showTypeFields()">
                             <option value="link" {{ $materi->type == 'link' ? 'selected' : '' }}>Link</option>
@@ -37,21 +37,21 @@
                     <div id="linkField" class="hidden mb-4">
                         <label for="link" class="block text-sm font-medium text-gray-700">Link Google Drive</label>
                         <textarea id="link" name="link" rows="3"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">{{ old('link', $materi->link) }}</textarea>
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('link', $materi->link) }}</textarea>
                     </div>
 
                     <!-- File Upload Field (Hidden or Visible based on Type) -->
                     <div id="fileUploadField" class="hidden mb-4">
                         <label for="file" class="block text-sm font-medium text-gray-700">Upload File</label>
                         <input type="file" id="file" name="file"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" onchange="previewFile()">
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="previewFile()">
                         <div id="filePreview" class="mt-2"></div>
                     </div>
 
                     <!-- Content Field (for Article type) -->
                     <div id="contentField" class="hidden mb-4">
                         <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        <textarea id="content" name="content" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Add your content here">{{ old('content', $materi->content) }}</textarea>
                     </div>
 
@@ -59,7 +59,7 @@
                     <div id="urlField" class="hidden mb-4">
                         <label for="url" class="block text-sm font-medium text-gray-700">Url</label>
                         <input type="text" id="url" name="url"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" value="{{ old('url', $materi->url) }}">
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('url', $materi->url) }}">
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@
             </div>
 
             <!-- Submit Button for both Materi and Assignment -->
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Update Materi & Assignment</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Simpan</button>
         </form>
     </div>
 

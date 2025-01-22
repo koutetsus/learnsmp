@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="container mx-auto px-4">
-        <div class="bg-white shadow-md rounded-md p-6">
+    <div class="container mx-auto px-4 ">
+        <div class="bg-white shadow-md dark:bg-gray-800 dark:text-gray-200 rounded-md p-6 w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <h1 class="text-2xl font-semibold mb-4">{{ $materi->title }}</h1>
 
             <div class="mb-4">
-                <strong>Teacher:</strong>
+                <strong>Guru:</strong>
                 <p>{{ $materi->teacher->name }}</p>
             </div>
 
@@ -14,12 +14,12 @@
             </div>
 
             <div class="mb-4">
-                <strong>Description:</strong>
+                <strong>Deskripsi:</strong>
                 <p>{{ $materi->description }}</p>
             </div>
 
             <div class="mb-4">
-                <strong>Type:</strong>
+                <strong>Tipe:</strong>
                 <p>{{ ucfirst($materi->type) }}</p>
             </div>
 
@@ -83,7 +83,7 @@
             @endif
                     <!-- Display Assignments -->
                     <div class="mt-8 border-t pt-4">
-                        <h3 class="text-lg font-semibold">Assignments</h3>
+                        <h3 class="text-lg font-semibold">Tugas</h3>
 
                         @forelse($materi->assignments as $assignment)
                             <div class="mt-4">
@@ -108,7 +108,7 @@
                                 @endif
                             </div>
                         @empty
-                            <p>No assignments available for this materi.</p>
+                            <p>Tidak Ada Tugas</p>
                         @endforelse
                     </div>
                     </div>
@@ -121,7 +121,7 @@
                 @if($materi->assignments->isNotEmpty())
                 @foreach($materi->assignments as $assignment)
                     <div class="mt-4 relative">
-                        <p><strong>Assignment Type:</strong> {{ ucfirst($assignment->assignments_type) }}</p>
+                        <p><strong>Tipe Tugas:</strong> {{ ucfirst($assignment->assignments_type) }}</p>
 
                         <!-- Check if the assignment has been submitted by the user -->
                         @php
@@ -152,7 +152,7 @@
                                 <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
                                 <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
 
-                                <label for="submission_type" class="block text-sm font-medium text-gray-700">Submission Type</label>
+                                <label for="submission_type" class="block text-sm font-medium text-gray-700">Pengumpulan Tugas</label>
                                 <select name="submission_type" id="submission_type" class="mt-1 block w-full" required>
                                     <option value="document">Document</option>
                                     <option value="link">Link</option>
@@ -201,7 +201,7 @@
 
             <!-- Button back to list -->
             <div class="mt-5 flex justify-start">
-                <a href="{{ route('materis.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Back to List</a>
+                <a href="{{ route('materis.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded">Kembali</a>
             </div>
         </div>
     </div>

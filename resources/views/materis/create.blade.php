@@ -9,7 +9,7 @@
 
                     <!-- Mata Pelajaran -->
                     <div class="mb-4">
-                        <label for="mata_pelajaran_id" class="block text-sm font-medium text-gray-700">Mata Pelajaran</label>
+                        <label for="mata_pelajaran_id" class="block text-sm font-medium text-gray-700 ">Mata Pelajaran</label>
                         <div class="flex items-center gap-2">
                             <select id="mata_pelajaran_id" name="mata_pelajaran_id" class="w-full border-gray-300 rounded-md shadow-sm">
                                 @foreach ($mataPelajaran as $mata)
@@ -22,19 +22,19 @@
 
                     <!-- Title -->
                     <div class="mb-4">
-                        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700">Judul</label>
                         <input type="text" id="title" name="title" class="w-full border-gray-300 rounded-md shadow-sm" required>
                     </div>
 
                     <!-- Description -->
                     <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
                         <textarea id="description" name="description" rows="3" class="w-full border-gray-300 rounded-md shadow-sm"></textarea>
                     </div>
 
                     <!-- Type -->
                     <div class="mb-4">
-                        <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                        <label for="type" class="block text-sm font-medium text-gray-700">Tipe Materi</label>
                         <select id="type" name="type" class="w-full border-gray-300 rounded-md shadow-sm" onchange="showTypeFields()">
                             <option value="link">Link</option>
                             <option value="document">Document</option>
@@ -67,10 +67,10 @@
 
                 <!-- Column for Assignment -->
                 <div class="sm:basis-1/2">
-                    <h2 class="text-xl font-semibold mb-6">Add Assignment</h2>
+                    <h2 class="text-xl font-semibold mb-6">Tambahkan Tugas</h2>
 
                     <div class="mb-4">
-                        <label for="assignments_type" class="block text-sm font-medium text-gray-700">Assignment Type</label>
+                        <label for="assignments_type" class="block text-sm font-medium text-gray-700">Tipe Tugas</label>
                         <select id="assignments_type" name="assignments_type" class="w-full border-gray-300 rounded-md shadow-sm" onchange="showAssignmentFields()">
                             <option value="link">Link</option>
                             <option value="document">Document</option>
@@ -97,7 +97,7 @@
 
             <!-- Submit Button -->
             <div class="flex justify-start mt-6">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600">Save Materi & Assignment</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600">Simpan</button>
             </div>
         </form>
     </div>
@@ -105,15 +105,15 @@
     <!-- Modal -->
     <div id="createMataPelajaranModal" class="fixed inset-0 z-50 hidden bg-gray-500 bg-opacity-75 flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 class="text-xl font-semibold mb-4">Create New Mata Pelajaran</h2>
+            <h2 class="text-xl font-semibold mb-4">Tambah Mata Pelajaran</h2>
             <form id="createMataPelajaranForm" method="POST" action="{{ route('mataPelajaran.store') }}">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Nama Mata Pelajaran</label>
                     <input type="text" id="name" name="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
                 </div>
                 <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Save</button>
-                <button type="button" onclick="closeModal()" class="ml-2 bg-red-500 text-white px-4 py-2 rounded-md">Cancel</button>
+                <button type="button" onclick="closeModal()" class="ml-2 bg-red-500 text-white px-4 py-2 rounded-md">Kembali</button>
             </form>
         </div>
     </div>

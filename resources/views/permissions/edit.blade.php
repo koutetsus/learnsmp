@@ -6,14 +6,14 @@
             @csrf
             @method('PUT')
             <div class="mb-4">
-                <label for="name" class="block text-gray-700">Permission Name</label>
-                <input type="text" name="name" id="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" value="{{ old('name', $permission->name) }}" required>
+                <label for="name" class="block text-gray-700 dark:text-gray-300">Nama Permission</label>
+                <input type="text" name="name" id="name" class="w-full px-4 py-2 border rounded text-gray-900 dark:text-gray dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('name', $permission->name) }}" required>
                 @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Permission</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Simpan</button>
         </form>
     </div>
 </x-app-layout>
