@@ -25,7 +25,7 @@
 
                         <!-- Show content Document/ DOC, DOCX, or PDF -->
                 @if($materi->type === 'document' && isset($materi->file))
-                <a href="{{ asset('storage/materi_files/' . basename($materi->file)) }}" download class="text-blue-500">Download Document (DOC, DOCX, PDF)</a>
+                <a href="{{ asset('storage/materi_files/' . basename($materi->file)) }}" download class="text-blue-500"></a>
                 @php
                     // Get the file extension
                     $extension = pathinfo($materi->file, PATHINFO_EXTENSION);
@@ -93,7 +93,7 @@
                                         $filePath = str_replace('public/', '', $assignment->assignments_file);
                                     @endphp
 
-                                    <p><strong>Document:</strong></p>
+                                    {{-- <p><strong>Document:</strong></p> --}}
                                     @if(Str::endsWith($filePath, '.pdf'))
                                         <iframe src="{{ asset('storage/' . $filePath) }}" class="w-full h-96 border rounded-md"></iframe>
                                     @elseif(in_array(pathinfo($filePath, PATHINFO_EXTENSION), ['doc', 'docx']))

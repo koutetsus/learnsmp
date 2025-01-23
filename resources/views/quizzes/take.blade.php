@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h1 class="text-xl font-bold">Take Quiz: {{ $quiz->title }}</h1>
+        <h1 class="text-xl font-bold">Latihan Soal : {{ $quiz->title }}</h1>
     </x-slot>
 
     <form action="{{ route('quizzes.submit', $quiz->id) }}" method="POST" id="quizForm">
@@ -56,7 +56,7 @@
                 <!-- Submit Button -->
                 <div class="mt-6 text-center">
                     <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Submit Quiz
+                        Submit
                     </button>
                 </div>
             </div>

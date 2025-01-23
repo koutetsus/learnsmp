@@ -45,18 +45,18 @@
             <div id="questions" class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <!-- Initial Question -->
                 <div class="question" id="question_1">
-                    <label class="block text-sm font-medium text-gray-700">Question 1</label>
+                    <label class="block text-sm font-medium text-gray-700">Pertanyaan 1</label>
                     <input type="text" name="questions[0][text]"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                         placeholder="Enter the question text">
 
-                    <label for="question_photo_1" class="block text-sm font-medium text-gray-700 mt-2">Upload Photo (Optional)</label>
+                    <label for="question_photo_1" class="block text-sm font-medium text-gray-700 mt-2">Upload Foto (Optional)</label>
                     <input type="file" name="questions[0][photo]" id="question_photo_1"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
 
                     <button type="button" onclick="addAnswer(1)"
                         class="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Add Answer
+                        Tambah Jawaban
                     </button>
                     <div id="answers_1" class="mt-2"></div>
 
@@ -69,12 +69,12 @@
 
             <button type="button" onclick="addQuestion()"
                 class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
-                Add Another Question
+                Tambah Pertanyaan
             </button>
 
             <button type="submit"
                 class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                Save Quiz
+                Submit
             </button>
         </div>
     </form>
